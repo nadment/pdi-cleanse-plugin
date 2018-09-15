@@ -57,8 +57,8 @@ import org.w3c.dom.Node;
  *
  */
 @SuppressWarnings("unused")
-@Step(id = "Cleanse", image = "cleanse.svg", i18nPackageName = "org.pentaho.di.trans.steps.cleanse", name = "Cleanse.Name", description = "Cleanse.Description", categoryDescription = "i18n:org.pentaho.di.trans.step:BaseStep.Category.Experimental", // TODO:
-		documentationUrl = "https://github.com/nadment/pdi-cleanse/wiki")
+@Step(id = "Cleanse", image = "cleanse.svg", i18nPackageName = "org.pentaho.di.trans.steps.cleanse", name = "Cleanse.Name", description = "Cleanse.Description", categoryDescription = "i18n:org.pentaho.di.trans.step:BaseStep.Category.DataQuality", 
+		documentationUrl = "https://github.com/nadment/pdi-cleanse-plugin/wiki")
 @InjectionSupported(localizationPrefix = "CleanseMeta.Injection.", groups = { "FIELDS" })
 public class CleanseMeta extends BaseStepMeta implements StepMetaInterface {
 
