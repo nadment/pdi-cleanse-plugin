@@ -5,7 +5,7 @@
 
 This plugin provide PDI step to cleanse string with rules from a set of fields.
 
-![Image](https://github.com/nadment/pdi-cleanse-plugin/blob/master/src/main/resources/cleanse.svg)
+![Image](https://github.com/nadment/pdi-cleanse-plugin/blob/master/src/main/resources/cleanse.png)
 
 
 ## How to install
