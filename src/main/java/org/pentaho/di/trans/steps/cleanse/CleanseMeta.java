@@ -57,8 +57,7 @@ import org.w3c.dom.Node;
  *
  */
 @SuppressWarnings("unused")
-@Step(id = "Cleanse", image = "cleanse.svg", i18nPackageName = "org.pentaho.di.trans.steps.cleanse", name = "Cleanse.Name", description = "Cleanse.Description", categoryDescription = "i18n:org.pentaho.di.trans.step:BaseStep.Category.DataQuality", 
-		documentationUrl = "https://github.com/nadment/pdi-cleanse-plugin/wiki")
+@Step(id = "Cleanse", image = "cleanse.svg", i18nPackageName = "org.pentaho.di.trans.steps.cleanse", name = "Cleanse.Name", description = "Cleanse.Description", categoryDescription = "i18n:org.pentaho.di.trans.step:BaseStep.Category.DataQuality", documentationUrl = "https://github.com/nadment/pdi-cleanse-plugin/wiki")
 @InjectionSupported(localizationPrefix = "CleanseMeta.Injection.", groups = { "FIELDS" })
 public class CleanseMeta extends BaseStepMeta implements StepMetaInterface {
 
@@ -73,7 +72,7 @@ public class CleanseMeta extends BaseStepMeta implements StepMetaInterface {
 	private static final String TAG_NAME = "name"; //$NON-NLS-1$
 
 	private static final String TAG_DESCRIPTION = "description"; //$NON-NLS-1$
-	
+
 	private static final String TAG_RULE = "rule"; //$NON-NLS-1$
 
 	/** The fields to cleanse */
@@ -127,19 +126,19 @@ public class CleanseMeta extends BaseStepMeta implements StepMetaInterface {
 	@Override
 	public void setDefault() {
 		this.cleanses = new ArrayList<>();
-		
+
 		CleanseOperation o = new CleanseOperation();
 		o.setName("Cleane name");
 		o.setDescription("test desc");
-		//o.add(new TrimRule());
-		
+		// o.add(new TrimRule());
+
 	}
 
 	@Override
 	public Object clone() {
 		CleanseMeta clone = (CleanseMeta) super.clone();
 
-//		clone.cleanses = Arrays.copyOf(cleanses, cleanses.length);
+		// clone.cleanses = Arrays.copyOf(cleanses, cleanses.length);
 
 		return clone;
 	}
@@ -149,21 +148,23 @@ public class CleanseMeta extends BaseStepMeta implements StepMetaInterface {
 
 		StringBuilder xml = new StringBuilder(500);
 
-//		xml.append("    <operations>").append(Const.CR);
-//		for (CleanseOperation operation : this.getOperations()) {
-//			xml.append("      <operation>").append(Const.CR);
-//			xml.append("        ").append(XMLHandler.addTagValue(TAG_NAME, operation.getName()));
-//			xml.append("        ").append(XMLHandler.addTagValue(TAG_DESCRIPTION, operation.getDescription()));
-//			xml.append("      	<rules>").append(Const.CR);
-//			for (CleanseRuleInterface rule : operation ) {
-//				xml.append("        ").append(XMLHandler.addTagValue(TAG_RULE, rule.getId()));
-//			}
-//			xml.append("      	</rules>").append(Const.CR);
-//			xml.append("      </operation>").append(Const.CR);
-//		}
-//		xml.append("    </operations>").append(Const.CR);
+		// xml.append(" <operations>").append(Const.CR);
+		// for (CleanseOperation operation : this.getOperations()) {
+		// xml.append(" <operation>").append(Const.CR);
+		// xml.append(" ").append(XMLHandler.addTagValue(TAG_NAME,
+		// operation.getName()));
+		// xml.append(" ").append(XMLHandler.addTagValue(TAG_DESCRIPTION,
+		// operation.getDescription()));
+		// xml.append(" <rules>").append(Const.CR);
+		// for (CleanseRuleInterface rule : operation ) {
+		// xml.append(" ").append(XMLHandler.addTagValue(TAG_RULE,
+		// rule.getId()));
+		// }
+		// xml.append(" </rules>").append(Const.CR);
+		// xml.append(" </operation>").append(Const.CR);
+		// }
+		// xml.append(" </operations>").append(Const.CR);
 
-		
 		xml.append("<fields>").append(Const.CR);
 		for (Cleanse cleanse : this.getCleanses()) {
 			xml.append("<field>").append(Const.CR);
@@ -204,12 +205,14 @@ public class CleanseMeta extends BaseStepMeta implements StepMetaInterface {
 	public void saveRep(Repository repository, IMetaStore metaStore, ObjectId id_transformation, ObjectId id_step)
 			throws KettleException {
 		try {
-//			for (int i = 0; i < this.getOperations().length; i++) {
-//				CleanseOperation operation = operations[i];
-//				repository.saveStepAttribute(id_transformation, id_step, i, TAG_NAME, operation.getName());
-//				repository.saveStepAttribute(id_transformation, id_step, i, TAG_RULE, operation.getDescription());
-//			}
-			
+			// for (int i = 0; i < this.getOperations().length; i++) {
+			// CleanseOperation operation = operations[i];
+			// repository.saveStepAttribute(id_transformation, id_step, i,
+			// TAG_NAME, operation.getName());
+			// repository.saveStepAttribute(id_transformation, id_step, i,
+			// TAG_RULE, operation.getDescription());
+			// }
+
 			for (int i = 0; i < this.cleanses.size(); i++) {
 				Cleanse cleanse = cleanses.get(i);
 				repository.saveStepAttribute(id_transformation, id_step, i, TAG_INPUT_FIELD, cleanse.getInputField());
@@ -371,7 +374,7 @@ public class CleanseMeta extends BaseStepMeta implements StepMetaInterface {
 		}
 
 		// See if there something to cleanse
-		if (this.getCleanses().isEmpty() ) {
+		if (this.getCleanses().isEmpty()) {
 			remarks.add(new CheckResult(CheckResultInterface.TYPE_RESULT_WARNING,
 					BaseMessages.getString(PKG, "CleanseMeta.CheckResult.EmptyInStreamFields"), stepMeta));
 		}

@@ -1,3 +1,19 @@
+/*******************************************************************************
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ ******************************************************************************/
+
 package org.pentaho.di.trans.steps.cleanse;
 
 import java.lang.annotation.Annotation;
@@ -50,9 +66,9 @@ public class CleanseRulePluginType extends BasePluginType implements PluginTypeI
 	}
 
 	public void searchPlugins() throws KettlePluginException {
-		//registerNatives();
+		// registerNatives();
 		registerPluginJars();
-		//registerXmlPlugins();
+		// registerXmlPlugins();
 	}
 
 	protected void registerXmlPlugins() throws KettlePluginException {
@@ -81,72 +97,75 @@ public class CleanseRulePluginType extends BasePluginType implements PluginTypeI
 	}
 
 	protected void registerPluginJars() throws KettlePluginException {
-		
-	    List<JarFileAnnotationPlugin> jarFilePlugins = findAnnotatedClassFiles( CleanseRule.class.getName() );
-	    for ( JarFileAnnotationPlugin jarFilePlugin : jarFilePlugins ) {
 
-	      URLClassLoader urlClassLoader =
-	        createUrlClassLoader( jarFilePlugin.getJarFile(), getClass().getClassLoader() );
+		List<JarFileAnnotationPlugin> jarFilePlugins = findAnnotatedClassFiles(CleanseRule.class.getName());
+		for (JarFileAnnotationPlugin jarFilePlugin : jarFilePlugins) {
 
-	      try {
-	    	 // TODO: BUG  
-	        //Class<?> clazz = urlClassLoader.loadClass( jarFilePlugin.getClassName() );
-	        Class<?> clazz = this.getClass().getClassLoader().loadClass( jarFilePlugin.getClassName() );
-	        if ( clazz == null ) {
-	          throw new KettlePluginException( "Unable to load class: " + jarFilePlugin.getClassName() );
-	        }
-	        List<String> libraries = new ArrayList<String>();
-	        java.lang.annotation.Annotation annotation = null;
-	        try {
-	        	
-	        // Bug annotation is null, if class is not loaded with the same class loader
-	          annotation = clazz.getAnnotation( CleanseRule.class );
+			URLClassLoader urlClassLoader = createUrlClassLoader(jarFilePlugin.getJarFile(),
+					getClass().getClassLoader());
 
-	          String jarFilename = URLDecoder.decode( jarFilePlugin.getJarFile().getFile(), "UTF-8" );
-	          libraries.add( jarFilename );
-	          FileObject fileObject = KettleVFS.getFileObject( jarFilename );
-	          FileObject parentFolder = fileObject.getParent();
-	          String parentFolderName = KettleVFS.getFilename( parentFolder );
-	          String libFolderName = null;
-	          if ( parentFolderName.endsWith( Const.FILE_SEPARATOR + "lib" ) ) {
-	            libFolderName = parentFolderName;
-	          } else {
-	            libFolderName = parentFolderName + Const.FILE_SEPARATOR + "lib";
-	          }
+			try {
+				// TODO: BUG
+				// Class<?> clazz = urlClassLoader.loadClass(
+				// jarFilePlugin.getClassName() );
+				Class<?> clazz = this.getClass().getClassLoader().loadClass(jarFilePlugin.getClassName());
+				if (clazz == null) {
+					throw new KettlePluginException("Unable to load class: " + jarFilePlugin.getClassName());
+				}
+				List<String> libraries = new ArrayList<String>();
+				java.lang.annotation.Annotation annotation = null;
+				try {
 
-	          PluginFolder folder = new PluginFolder( libFolderName, false, false, searchLibDir );
-	          FileObject[] jarFiles = folder.findJarFiles( true );
+					// Bug annotation is null, if class is not loaded with the
+					// same class loader
+					annotation = clazz.getAnnotation(CleanseRule.class);
 
-	          if ( jarFiles != null ) {
-	            for ( FileObject jarFile : jarFiles ) {
+					String jarFilename = URLDecoder.decode(jarFilePlugin.getJarFile().getFile(), "UTF-8");
+					libraries.add(jarFilename);
+					FileObject fileObject = KettleVFS.getFileObject(jarFilename);
+					FileObject parentFolder = fileObject.getParent();
+					String parentFolderName = KettleVFS.getFilename(parentFolder);
+					String libFolderName = null;
+					if (parentFolderName.endsWith(Const.FILE_SEPARATOR + "lib")) {
+						libFolderName = parentFolderName;
+					} else {
+						libFolderName = parentFolderName + Const.FILE_SEPARATOR + "lib";
+					}
 
-	              String fileName = KettleVFS.getFilename( jarFile );
+					PluginFolder folder = new PluginFolder(libFolderName, false, false, searchLibDir);
+					FileObject[] jarFiles = folder.findJarFiles(true);
 
-	              // If the plugin is in the lib folder itself, we'll ignore it here
-	              if ( fileObject.equals( jarFile ) ) {
-	                continue;
-	              }
-	              libraries.add( fileName );
-	            }
-	          }
-	        } catch ( Exception e ) {
-	          throw new KettlePluginException( "Unexpected error loading class "
-	            + clazz.getName() + " of plugin type: " + CleanseRule.class, e );
-	        }
+					if (jarFiles != null) {
+						for (FileObject jarFile : jarFiles) {
 
-	        handlePluginAnnotation( clazz, annotation, libraries, false, jarFilePlugin.getPluginFolder() );
-	      } catch ( Exception e ) {
-	        // Ignore for now, don't know if it's even possible.
-	        LogChannel.GENERAL.logError(
-	          "Unexpected error registering jar plugin file: " + jarFilePlugin.getJarFile(), e );
-	      } finally {
-	        if ( urlClassLoader != null && urlClassLoader instanceof KettleURLClassLoader ) {
-	          ( (KettleURLClassLoader) urlClassLoader ).closeClassLoader();
-	        }
-	      }
-	    }
+							String fileName = KettleVFS.getFilename(jarFile);
+
+							// If the plugin is in the lib folder itself, we'll
+							// ignore it here
+							if (fileObject.equals(jarFile)) {
+								continue;
+							}
+							libraries.add(fileName);
+						}
+					}
+				} catch (Exception e) {
+					throw new KettlePluginException("Unexpected error loading class " + clazz.getName()
+							+ " of plugin type: " + CleanseRule.class, e);
+				}
+
+				handlePluginAnnotation(clazz, annotation, libraries, false, jarFilePlugin.getPluginFolder());
+			} catch (Exception e) {
+				// Ignore for now, don't know if it's even possible.
+				LogChannel.GENERAL
+						.logError("Unexpected error registering jar plugin file: " + jarFilePlugin.getJarFile(), e);
+			} finally {
+				if (urlClassLoader != null && urlClassLoader instanceof KettleURLClassLoader) {
+					((KettleURLClassLoader) urlClassLoader).closeClassLoader();
+				}
+			}
+		}
 	}
-	
+
 	/**
 	 * Scan & register internal cleanse rule plugins
 	 */

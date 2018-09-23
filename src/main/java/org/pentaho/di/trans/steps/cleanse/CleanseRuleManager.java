@@ -1,3 +1,18 @@
+/*******************************************************************************
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ ******************************************************************************/
 package org.pentaho.di.trans.steps.cleanse;
 
 import java.util.ArrayList;
@@ -8,6 +23,7 @@ import org.pentaho.di.core.exception.KettlePluginException;
 import org.pentaho.di.core.plugins.PluginInterface;
 import org.pentaho.di.core.plugins.PluginRegistry;
 import org.pentaho.di.core.util.Utils;
+
 /**
  * Singleton controlling cleanse rule plugin.
  * 
@@ -33,7 +49,6 @@ public class CleanseRuleManager {
 		return plugins;
 	}
 
-
 	/**
 	 * Find rule plugin by name
 	 * 
@@ -44,15 +59,15 @@ public class CleanseRuleManager {
 	public PluginInterface getRuleByName(final String name) {
 		if (!Utils.isEmpty(name)) {
 			for (PluginInterface plugin : getRules()) {
-					if (name.equals(plugin.getName())) {
-						return plugin;
-					}
+				if (name.equals(plugin.getName())) {
+					return plugin;
+				}
 			}
 		}
 
 		return null;
 	}
-	
+
 	/**
 	 * Find rule name by one of is plugin identifier
 	 * 
@@ -73,7 +88,7 @@ public class CleanseRuleManager {
 
 		return null;
 	}
-		
+
 	/**
 	 * Create processor instance by rule identifer
 	 * 
@@ -81,7 +96,7 @@ public class CleanseRuleManager {
 	 *            The rule identifier
 	 * @return the processor instance or null if not found
 	 */
-	public CleanseProcessor createProcessor(final String id) throws KettlePluginException  {
+	public CleanseProcessor createProcessor(final String id) throws KettlePluginException {
 
 		if (Utils.isEmpty(id)) {
 			return null;
