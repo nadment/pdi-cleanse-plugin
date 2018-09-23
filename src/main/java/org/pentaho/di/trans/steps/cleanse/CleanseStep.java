@@ -55,9 +55,13 @@ public class CleanseStep extends BaseStep implements StepInterface {
 		CleanseMeta meta = (CleanseMeta) smi;
 		CleanseData data = (CleanseData) sdi;
 
-		first = true;
-
-		return super.init(meta, data);
+	    if ( super.init( smi, sdi ) ) {
+	    	first = true;
+	    	
+	        return true;
+	    }
+	   
+		return false;
 	}
 
 	@Override

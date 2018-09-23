@@ -84,8 +84,6 @@ public class CleanseDialog extends AbstractStepDialog<CleanseMeta> {
 		super(parent, in, transMeta, sName);
 
 		setText(BaseMessages.getString(PKG, "CleanseDialog.Shell.Title"));
-		// allInputStreamFields = new HashMap<String, Integer>();
-
 	}
 
 	@Override
