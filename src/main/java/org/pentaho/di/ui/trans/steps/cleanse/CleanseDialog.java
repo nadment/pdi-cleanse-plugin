@@ -54,9 +54,7 @@ public class CleanseDialog extends AbstractStepDialog<CleanseMeta> {
 
 	private static Class<?> PKG = CleanseMeta.class; // for i18n purposes
 
-	private TableView wFields;
-
-	private ColumnInfo[] columnInfos;
+	private TableView tblFields;
 
 	public static void main(String[] args) {
 		try {
@@ -93,7 +91,7 @@ public class CleanseDialog extends AbstractStepDialog<CleanseMeta> {
 		for (int i = 0; i < cleanses.size(); i++) {
 
 			Cleanse cleanse = cleanses.get(i);
-			TableItem item = wFields.getTable().getItem(i);
+			TableItem item = tblFields.getTable().getItem(i);
 			item.setText(1, Const.NVL(cleanse.getInputField(), ""));
 			item.setText(2, Const.NVL(cleanse.getName(), ""));
 			
@@ -107,8 +105,8 @@ public class CleanseDialog extends AbstractStepDialog<CleanseMeta> {
 			}
 		}
 
-		wFields.setRowNums();
-		wFields.optWidth(true);
+		tblFields.setRowNums();
+		tblFields.optWidth(true);
 	}
 
 	@Override
@@ -123,8 +121,8 @@ public class CleanseDialog extends AbstractStepDialog<CleanseMeta> {
 		stepname = wStepname.getText();
 
 		List<Cleanse> cleanses = new ArrayList<>();
-		for (int i = 0; i < wFields.nrNonEmpty(); i++) {
-			TableItem item = wFields.getNonEmpty(i);
+		for (int i = 0; i < tblFields.nrNonEmpty(); i++) {
+			TableItem item = tblFields.getNonEmpty(i);
 
 			Cleanse cleanse = new Cleanse();
 			cleanse.setInputField(item.getText(1));
@@ -159,7 +157,7 @@ public class CleanseDialog extends AbstractStepDialog<CleanseMeta> {
 			}
 		});
 
-		columnInfos = new ColumnInfo[] {
+		ColumnInfo[] columns = new ColumnInfo[] {
 				new ColumnInfo(BaseMessages.getString(PKG, "CleanseDialog.ColumnInfo.FieldInName"),
 						ColumnInfo.COLUMN_TYPE_CCOMBO, new String[] { "" }, false),
 				new ColumnInfo(BaseMessages.getString(PKG, "CleanseDialog.ColumnInfo.FieldOutName"),
@@ -167,19 +165,19 @@ public class CleanseDialog extends AbstractStepDialog<CleanseMeta> {
 				new ColumnInfo(BaseMessages.getString(PKG, "CleanseDialog.ColumnInfo.Rule"),
 						ColumnInfo.COLUMN_TYPE_CCOMBO, CleanseRuleManager.getInstance().getRuleNames()) };
 
-		columnInfos[1].setToolTip(BaseMessages.getString(PKG, "CleanseDialog.ColumnInfo.OutputField.Tooltip"));
-		columnInfos[1].setUsingVariables(true);
+		columns[1].setToolTip(BaseMessages.getString(PKG, "CleanseDialog.ColumnInfo.OutputField.Tooltip"));
+		columns[1].setUsingVariables(true);
 
 		// int noFieldRows = (meta.getCleanses() != null ?
 		// meta.getCleanses().length : 1);
 
-		wFields = new TableView(transMeta, parent, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI, columnInfos,
+		tblFields = new TableView(transMeta, parent, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI, columns,
 				this.getStepMeta().getCleanses().size(), lsMod, props);
 
-		wFields.setLayoutData(
+		tblFields.setLayoutData(
 				new FormDataBuilder().top(wlFields, Const.MARGIN).bottom().left().right(wGet, -Const.MARGIN).result());
 
-		wFields.getTable().addListener(SWT.Resize, new ColumnsResizer(4, 30, 30, 56));
+		tblFields.getTable().addListener(SWT.Resize, new ColumnsResizer(4, 30, 30, 56));
 
 		// Search the fields in the background
 		final Runnable runnable = new Runnable() {
@@ -195,7 +193,7 @@ public class CleanseDialog extends AbstractStepDialog<CleanseMeta> {
 						for (int i = 0; i < row.size(); i++) {
 							fieldNames[i] = row.getValueMeta(i).getName();
 						}
-						columnInfos[0].setComboValues(fieldNames);
+						columns[0].setComboValues(fieldNames);
 					} catch (KettleException e) {
 						logError(BaseMessages.getString(PKG, "CleanseDialog.Log.UnableToFindInput"));
 					}
@@ -223,7 +221,7 @@ public class CleanseDialog extends AbstractStepDialog<CleanseMeta> {
 					}
 				};
 
-				BaseStepDialog.getFieldsFromPrevious(row, wFields, 1, new int[] { 1 }, new int[] {}, -1, -1, listener);
+				BaseStepDialog.getFieldsFromPrevious(row, tblFields, 1, new int[] { 1 }, new int[] {}, -1, -1, listener);
 			}
 		} catch (KettleException ke) {
 			new ErrorDialog(shell, BaseMessages.getString(PKG, "System.Dialog.GetFieldsFailed.Title"),

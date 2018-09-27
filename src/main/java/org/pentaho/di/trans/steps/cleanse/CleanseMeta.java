@@ -165,15 +165,15 @@ public class CleanseMeta extends BaseStepMeta implements StepMetaInterface {
 		// }
 		// xml.append(" </operations>").append(Const.CR);
 
-		xml.append("<fields>").append(Const.CR);
+		xml.append("<fields>");
 		for (Cleanse cleanse : this.getCleanses()) {
-			xml.append("<field>").append(Const.CR);
+			xml.append("<field>");
 			xml.append(XMLHandler.addTagValue(TAG_INPUT_FIELD, cleanse.getInputField()));
 			xml.append(XMLHandler.addTagValue(TAG_NAME, cleanse.getName()));
 			xml.append(XMLHandler.addTagValue(TAG_RULE, cleanse.getRule()));
-			xml.append("</field>").append(Const.CR);
+			xml.append("</field>");
 		}
-		xml.append("</fields>").append(Const.CR);
+		xml.append("</fields>");
 
 		return xml.toString();
 	}
