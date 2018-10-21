@@ -1,13 +1,15 @@
 package org.pentaho.di.trans.steps.cleanse.rules;
 
 import org.pentaho.di.core.exception.KettleValueException;
+import org.pentaho.di.core.row.ValueMetaInterface;
 import org.pentaho.di.trans.steps.cleanse.CleanseProcessor;
 import org.pentaho.di.trans.steps.cleanse.CleanseRule;
 
 import gcardone.junidecode.Junidecode;
 
 /**
- * The rule converts strings from many languages of the world to a standard set of characters Universal Coded Character Set (UCS).
+ * The rule converts strings from many languages of the world to a standard set
+ * of characters Universal Coded Character Set (UCS).
  * 
  * @author Nicolas ADMENT
  *
@@ -16,17 +18,13 @@ import gcardone.junidecode.Junidecode;
 public class TransliterateRule implements CleanseProcessor {
 
 	@Override
-	public Object processValue(final Object object) throws KettleValueException {
+	public Object processValue(final ValueMetaInterface valueMeta, final Object object) throws KettleValueException {
 		if (object == null)
 			return null;
 
-		String value = null;
+		String value = valueMeta.getString(object);
 
-		if (object instanceof String) {
-			value = (String) object;
-			return Junidecode.unidecode(value);			
-		} else
-			throw new KettleValueException("Value is not a String");
+		return Junidecode.unidecode(value);
 	}
 
 }

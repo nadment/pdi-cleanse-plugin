@@ -4,6 +4,7 @@ import java.text.Normalizer;
 import java.util.regex.Pattern;
 
 import org.pentaho.di.core.exception.KettleValueException;
+import org.pentaho.di.core.row.ValueMetaInterface;
 import org.pentaho.di.trans.steps.cleanse.CleanseProcessor;
 import org.pentaho.di.trans.steps.cleanse.CleanseRule;
 
@@ -26,16 +27,11 @@ public class DiacriticalMarksRemovalRule implements CleanseProcessor {
 	public static final String EMPTY = "";
 
 	@Override
-	public Object processValue(final Object object) throws KettleValueException {
+	public Object processValue(final ValueMetaInterface valueMeta, final Object object) throws KettleValueException {
 		if (object == null)
 			return null;
 
-		String value = null;
-
-		if (object instanceof String)
-			value = (String) object;
-		else
-			throw new KettleValueException("Value is not a String");
+		String value = valueMeta.getString(object);
 
 		final Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");//$NON-NLS-1$
 		final StringBuilder decomposed = new StringBuilder(Normalizer.normalize(value.toString(), Normalizer.Form.NFD));

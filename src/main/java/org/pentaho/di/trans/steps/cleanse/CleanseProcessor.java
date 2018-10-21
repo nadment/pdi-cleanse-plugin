@@ -17,7 +17,8 @@
 package org.pentaho.di.trans.steps.cleanse;
 
 import org.pentaho.di.core.exception.KettleValueException;
+import org.pentaho.di.core.row.ValueMetaInterface;
 
 public interface CleanseProcessor {
-	public Object processValue(final Object object) throws KettleValueException;
+	public Object processValue(final ValueMetaInterface valueMeta, final Object object) throws KettleValueException;
 }

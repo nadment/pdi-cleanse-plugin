@@ -3,7 +3,10 @@ package org.pentaho.di.trans.steps.cleanse;
 import java.lang.reflect.ParameterizedType;
 
 import org.junit.Assert;
+import org.pentaho.di.core.exception.KettlePluginException;
 import org.pentaho.di.core.exception.KettleValueException;
+import org.pentaho.di.core.row.ValueMetaInterface;
+import org.pentaho.di.core.row.value.ValueMetaFactory;
 
 public class CleanseRuleTest<R extends CleanseProcessor> {
 
@@ -14,9 +17,14 @@ public class CleanseRuleTest<R extends CleanseProcessor> {
       R rule = ((R) ((Class<R>) ((ParameterizedType) this.getClass().getGenericSuperclass())
           .getActualTypeArguments()[0]).newInstance());
 
-      Object actual = rule.processValue(input);
+      
+  	// create ValueMeta
+		ValueMetaInterface vm = ValueMetaFactory.createValueMeta("Test", ValueMetaInterface.TYPE_STRING);
+
+      
+      Object actual = rule.processValue(vm, input);
       Assert.assertEquals(expected, actual);
-    } catch (KettleValueException | InstantiationException | IllegalAccessException e) {
+    } catch (KettleValueException | KettlePluginException | InstantiationException | IllegalAccessException e) {
       Assert.fail(e.getMessage());
     }
 

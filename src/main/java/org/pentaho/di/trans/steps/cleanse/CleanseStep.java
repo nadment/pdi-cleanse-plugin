@@ -123,25 +123,26 @@ public class CleanseStep extends BaseStep implements StepInterface {
 		for (Cleanse cleanse : meta.getCleanses()) {
 
 			int index = data.outputRowMeta.indexOfValue(cleanse.getInputField());
-			ValueMetaInterface vm = null;
+			ValueMetaInterface valueMeta = null;
 			try {
 				// Get value from output in case we apply multi rule on same
 				// field
 				Object value = outputRowValues[index];
-				Object result = value;
-				if (value != null) {
-					result = data.processors.get(cleanse).processValue(value);
-				}
 
 				// Output field is different
 				if (!Utils.isEmpty(cleanse.getName())) {
 					index = data.outputRowMeta.indexOfValue(cleanse.getName());
 				}
-				vm = data.outputRowMeta.getValueMeta(index);
-				outputRowValues[index] = vm.convertData(vm, result);
+				valueMeta = data.outputRowMeta.getValueMeta(index);
+				
+				Object result = value;
+				if (value != null) {
+					result = data.processors.get(cleanse).processValue(valueMeta, value);
+				}
+				outputRowValues[index] = valueMeta.convertData(valueMeta, result);
 			} catch (KettleValueException e) {
 				logError(BaseMessages.getString(PKG, "Cleanse.Log.DataIncompatibleError", String.valueOf(row[index]),
-						String.valueOf(inputRowMeta.getValueMeta(index)), vm));
+						String.valueOf(inputRowMeta.getValueMeta(index)), valueMeta));
 				throw e;
 			}
 		}

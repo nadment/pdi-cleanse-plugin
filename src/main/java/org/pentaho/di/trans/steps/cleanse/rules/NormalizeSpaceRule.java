@@ -1,13 +1,16 @@
 package org.pentaho.di.trans.steps.cleanse.rules;
 
 import org.pentaho.di.core.exception.KettleValueException;
+import org.pentaho.di.core.row.ValueMetaInterface;
 import org.pentaho.di.trans.steps.cleanse.CleanseProcessor;
 import org.pentaho.di.trans.steps.cleanse.CleanseRule;
 
 /**
- * The rule remove leading and trailing whitespace and collapses multiple white space characters by a single space character.
+ * The rule remove leading and trailing whitespace and collapses multiple white
+ * space characters by a single space character.
  * 
- * <p>Whitespace is defined by {@link Character#isWhitespace(char)}.
+ * <p>
+ * Whitespace is defined by {@link Character#isWhitespace(char)}.
  * 
  * @author Nicolas ADMENT
  *
@@ -16,33 +19,30 @@ import org.pentaho.di.trans.steps.cleanse.CleanseRule;
 public class NormalizeSpaceRule implements CleanseProcessor {
 
 	@Override
-	public Object processValue(final Object object) throws KettleValueException {
+	public Object processValue(final ValueMetaInterface valueMeta, final Object object) throws KettleValueException {
 		if (object == null)
 			return null;
-		
-		if (object instanceof String) {
-			String value = (String) object;
-			char last = value.charAt(0);
-			StringBuilder result = new StringBuilder(value.length());
 
-			for (int index = 0; index < value.length(); index++) {
-				char ch = value.charAt(index);
+		String value = valueMeta.getString(object);
 
-				if (!Character.isWhitespace(ch) || !Character.isWhitespace(last)) {
+		char last = value.charAt(0);
+		StringBuilder result = new StringBuilder(value.length());
 
-					// Replace tab with space
-					if (Character.isWhitespace(ch))
-						ch = ' ';
+		for (int index = 0; index < value.length(); index++) {
+			char ch = value.charAt(index);
 
-					result.append(ch);
-					last = ch;
-				}
+			if (!Character.isWhitespace(ch) || !Character.isWhitespace(last)) {
+
+				// Replace tab with space
+				if (Character.isWhitespace(ch))
+					ch = ' ';
+
+				result.append(ch);
+				last = ch;
 			}
-
-			return result.toString();
 		}
-		else
-			throw new KettleValueException("Value is not a String");		
+
+		return result.toString();
 	}
 
 }

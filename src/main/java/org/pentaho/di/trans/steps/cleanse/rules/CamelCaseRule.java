@@ -1,6 +1,7 @@
 package org.pentaho.di.trans.steps.cleanse.rules;
 
 import org.pentaho.di.core.exception.KettleValueException;
+import org.pentaho.di.core.row.ValueMetaInterface;
 import org.pentaho.di.trans.steps.cleanse.CleanseProcessor;
 import org.pentaho.di.trans.steps.cleanse.CleanseRule;
 
@@ -14,20 +15,15 @@ import org.pentaho.di.trans.steps.cleanse.CleanseRule;
 public class CamelCaseRule implements CleanseProcessor {
 
 	@Override
-	public Object processValue(final Object object) throws KettleValueException {
+	public Object processValue(final ValueMetaInterface valueMeta, final Object object) throws KettleValueException {
 		if (object == null)
 			return null;
 
-		String value = null;
+		String value = valueMeta.getString(object);
 
-		if (object instanceof String) {
-			value = (String) object;
-
-			if (value.length() == 0) {
-				return value;
-			}
-		} else
-			throw new KettleValueException("Value is not a String");
+		if (value.length() == 0) {
+			return value;
+		}
 
 		StringBuilder result = new StringBuilder();
 		char last = value.charAt(0);

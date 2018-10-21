@@ -18,6 +18,7 @@ package org.pentaho.di.trans.steps.cleanse;
 import java.util.ArrayList;
 
 import org.pentaho.di.core.exception.KettleValueException;
+import org.pentaho.di.core.row.ValueMetaInterface;
 
 public class CleanseOperation extends ArrayList<CleanseProcessor> implements CleanseProcessor {
 
@@ -46,10 +47,10 @@ public class CleanseOperation extends ArrayList<CleanseProcessor> implements Cle
 	}
 
 	@Override
-	public Object processValue(Object object) throws KettleValueException {
+	public Object processValue(final ValueMetaInterface valueMeta, Object object) throws KettleValueException {
 
 		for (CleanseProcessor processor : this) {
-			object = processor.processValue(object);
+			object = processor.processValue(valueMeta, object);
 		}
 
 		return object;

@@ -1,6 +1,7 @@
 package org.pentaho.di.trans.steps.cleanse.rules;
 
 import org.pentaho.di.core.exception.KettleValueException;
+import org.pentaho.di.core.row.ValueMetaInterface;
 import org.pentaho.di.trans.steps.cleanse.CleanseProcessor;
 import org.pentaho.di.trans.steps.cleanse.CleanseRule;
 
@@ -14,24 +15,18 @@ import org.pentaho.di.trans.steps.cleanse.CleanseRule;
 public class SlashRemovalRule implements CleanseProcessor {
 
 	@Override
-	public Object processValue(final Object object) throws KettleValueException {
+	public Object processValue(final ValueMetaInterface valueMeta, final Object object) throws KettleValueException {
 		if (object == null)
 			return null;
 
-		String value = null;
-
-		if (object instanceof String)
-			value = (String) object;
-		else
-			throw new KettleValueException("Value is not a String");
-
+		String value = valueMeta.getString(object);
 		StringBuilder result = new StringBuilder(value.length());
 
 		for (int index = 0; index < value.length(); index++) {
 			char ch = value.charAt(index);
 
-			if (ch == '/' || ch == '\\') continue;
-			
+			if (ch == '/' || ch == '\\')
+				continue;
 
 			result.append(ch);
 		}
