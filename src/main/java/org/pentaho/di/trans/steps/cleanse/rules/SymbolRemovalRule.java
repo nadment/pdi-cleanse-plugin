@@ -18,11 +18,11 @@ import org.pentaho.di.trans.steps.cleanse.CleanseRule;
 public class SymbolRemovalRule implements CleanseProcessor {
 
 	@Override
-	public Object processValue(final ValueMetaInterface valueMeta, final Object object) throws KettleValueException {
+	public Object processValue(final ValueMetaInterface vm, final Object object) throws KettleValueException {
 		if (object == null)
 			return null;
 
-		String value = valueMeta.getString(object);
+		String value = vm.getString(object);
 		StringBuilder result = new StringBuilder(value.length());
 
 		for (int offset = 0; offset < value.length();) {

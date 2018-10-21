@@ -15,12 +15,12 @@ import org.pentaho.di.trans.steps.cleanse.CleanseRule;
 public class TrimRule implements CleanseProcessor {
 
 	@Override
-	public Object processValue(final ValueMetaInterface valueMeta, final Object object) throws KettleValueException {
+	public Object processValue(final ValueMetaInterface vm, final Object object) throws KettleValueException {
 
 		if (object == null)
 			return null;
 
-		String value = valueMeta.getString(object);
+		String value = vm.getString(object);
 		return value.trim();
 	}
 
