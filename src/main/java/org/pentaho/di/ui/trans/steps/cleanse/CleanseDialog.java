@@ -19,6 +19,7 @@ package org.pentaho.di.ui.trans.steps.cleanse;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Button;
@@ -91,16 +92,15 @@ public class CleanseDialog extends AbstractStepDialog<CleanseMeta> {
 
 			Cleanse cleanse = cleanses.get(i);
 			TableItem item = tblFields.getTable().getItem(i);
-			item.setText(1, Const.NVL(cleanse.getInputField(), ""));
-			item.setText(2, Const.NVL(cleanse.getName(), ""));
-			
+			item.setText(1, StringUtils.stripToEmpty(cleanse.getInputField()));
+			item.setText(2, StringUtils.stripToEmpty(cleanse.getName()));
+
 			PluginInterface rule = CleanseRuleManager.getInstance().getRuleById(cleanse.getRule());
-			if ( rule!=null) {
-				item.setText(3, Const.NVL(rule.getName(), ""));
-			}
-			else {
+			if (rule != null) {
+				item.setText(3, Const.nullToEmpty(rule.getName()));
+			} else {
 				// Rule not found
-				item.setText(3,"!"+cleanse.getRule()+"!");
+				item.setText(3, "!" + cleanse.getRule() + "!");
 			}
 		}
 
@@ -124,11 +124,11 @@ public class CleanseDialog extends AbstractStepDialog<CleanseMeta> {
 			TableItem item = tblFields.getNonEmpty(i);
 
 			Cleanse cleanse = new Cleanse();
-			cleanse.setInputField(item.getText(1));
-			cleanse.setName(item.getText(2));
+			cleanse.setInputField(StringUtils.stripToNull(item.getText(1)));
+			cleanse.setName(StringUtils.stripToNull(item.getText(2)));
 
-			String ruleName = item.getText(3);
-			if (!Utils.isEmpty(ruleName)) {
+			String ruleName = StringUtils.stripToNull(item.getText(3));
+			if (ruleName != null) {
 				cleanse.setRule(CleanseRuleManager.getInstance().getRuleByName(ruleName).getIds()[0]);
 			}
 
@@ -220,7 +220,8 @@ public class CleanseDialog extends AbstractStepDialog<CleanseMeta> {
 					}
 				};
 
-				BaseStepDialog.getFieldsFromPrevious(row, tblFields, 1, new int[] { 1 }, new int[] {}, -1, -1, listener);
+				BaseStepDialog.getFieldsFromPrevious(row, tblFields, 1, new int[] { 1 }, new int[] {}, -1, -1,
+						listener);
 			}
 		} catch (KettleException ke) {
 			new ErrorDialog(shell, BaseMessages.getString(PKG, "System.Dialog.GetFieldsFailed.Title"),

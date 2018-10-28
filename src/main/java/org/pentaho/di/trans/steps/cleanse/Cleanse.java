@@ -16,6 +16,7 @@
 
 package org.pentaho.di.trans.steps.cleanse;
 
+import org.apache.commons.lang.StringUtils;
 import org.pentaho.di.core.injection.Injection;
 
 /**
@@ -63,7 +64,7 @@ public class Cleanse implements Cloneable {
 
 	@Injection(name = "OUTPUT", group = "FIELDS")
 	public void setName(final String name) {
-		this.name = name;
+		this.name =  StringUtils.stripToNull(name);
 	}
 
 	public String getRule() {
