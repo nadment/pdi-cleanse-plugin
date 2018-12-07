@@ -135,4 +135,9 @@ public class CleanseRulePluginType extends BasePluginType implements PluginTypeI
 	@Override
 	protected void registerXmlPlugins() throws KettlePluginException {
 	}
+
+	@Override
+	// To avoid error, should be implemented
+	protected void registerNatives() throws KettlePluginException {
+	}
 }

@@ -106,13 +106,13 @@ public class CleanseRuleManager {
 	}
 
 	public String[] getRuleNames() {
-		ArrayList<String> ruleNames = new ArrayList<String>();
-
+						
+		List<String> names = new ArrayList<String>();
 		for (PluginInterface plugin : getRules()) {
-			ruleNames.add(plugin.getName());
+			names.add(plugin.getName());
 		}
-
-		return ruleNames.toArray(new String[ruleNames.size()]);
+		
+		return names.stream().sorted().toArray(String[]::new);
 	}
 
 }
