@@ -214,27 +214,9 @@ public class CleanseMeta extends BaseStepMeta implements StepMetaInterface {
 		}
 	}
 
-	/**
-	 * This method is called to determine the changes the step is making to the
-	 * row-stream.
-	 *
-	 * @param inputRowMeta
-	 *            the row structure coming in to the step
-	 * @param name
-	 *            the name of the step making the changes
-	 * @param info
-	 *            row structures of any info steps coming in
-	 * @param nextStep
-	 *            the description of a step this step is passing rows to
-	 * @param space
-	 *            the variable space for resolving variables
-	 * @param repository
-	 *            the repository instance optionally read from
-	 * @param metaStore
-	 *            the metaStore to optionally read from
-	 */
+
 	@Override
-	public void getFields(RowMetaInterface inputRowMeta, String name, RowMetaInterface[] info, StepMeta nextStep,
+	public void getFields(RowMetaInterface inputRowMeta, String stepName, RowMetaInterface[] info, StepMeta nextStep,
 			VariableSpace space, Repository repository, IMetaStore metaStore) throws KettleStepException {
 		try {
 
@@ -254,7 +236,7 @@ public class CleanseMeta extends BaseStepMeta implements StepMetaInterface {
 
 					// create ValueMeta
 					ValueMetaInterface vm = ValueMetaFactory.createValueMeta(cleanse.getName(), type);
-					vm.setOrigin(name);
+					vm.setOrigin(stepName);
 					inputRowMeta.addValueMeta(vm);
 				}
 			}

@@ -60,17 +60,13 @@ public class CleanseDialog extends AbstractStepDialog<CleanseMeta> {
 	private TableView tblFields;
 
 	/**
-	 * Constructor that saves incoming meta object to a local variable, so it
-	 * can conveniently read and write settings from/to it.
+	 * Constructor that saves incoming meta object to a local variable, so it can
+	 * conveniently read and write settings from/to it.
 	 *
-	 * @param parent
-	 *            the SWT shell to open the dialog in
-	 * @param in
-	 *            the meta object holding the step's settings
-	 * @param transMeta
-	 *            transformation description
-	 * @param sName
-	 *            the step name
+	 * @param parent    the SWT shell to open the dialog in
+	 * @param in        the meta object holding the step's settings
+	 * @param transMeta transformation description
+	 * @param sName     the step name
 	 */
 	public CleanseDialog(Shell parent, Object in, TransMeta transMeta, String sName) {
 		super(parent, in, transMeta, sName);
@@ -90,17 +86,16 @@ public class CleanseDialog extends AbstractStepDialog<CleanseMeta> {
 			item.setText(2, StringUtils.stripToEmpty(cleanse.getName()));
 
 			String id = cleanse.getRule();
-			if ( id.charAt(0)=='@' ) {
+			if (id.charAt(0) == '@') {
 				item.setText(3, Const.nullToEmpty(id));
-			}
-			else {
-			PluginInterface rule = CleanseRuleManager.getInstance().getRuleById(id);
-			if (rule != null) {
-				item.setText(3, Const.nullToEmpty(rule.getName()));
 			} else {
-				// Rule not found
-				item.setText(3, "!" + cleanse.getRule() + "!");
-			}
+				PluginInterface rule = CleanseRuleManager.getInstance().getRuleById(id);
+				if (rule != null) {
+					item.setText(3, Const.nullToEmpty(rule.getName()));
+				} else {
+					// Rule not found
+					item.setText(3, "!" + cleanse.getRule() + "!");
+				}
 			}
 		}
 
@@ -127,9 +122,9 @@ public class CleanseDialog extends AbstractStepDialog<CleanseMeta> {
 			cleanse.setInputField(StringUtils.stripToNull(item.getText(1)));
 			cleanse.setName(StringUtils.stripToNull(item.getText(2)));
 
-			String name = StringUtils.stripToNull(item.getText(3)); 					
-			if (name != null) {				
-				if ( name.charAt(0)=='@' ) {
+			String name = StringUtils.stripToNull(item.getText(3));
+			if (name != null) {
+				if (name.charAt(0) == '@') {
 					// Ignore operation
 				} else
 					cleanse.setRule(CleanseRuleManager.getInstance().getRuleByName(name).getIds()[0]);
@@ -158,8 +153,8 @@ public class CleanseDialog extends AbstractStepDialog<CleanseMeta> {
 				onGetField();
 			}
 		});
-		
-		Button wEditOperation =  new Button(parent, SWT.PUSH);
+
+		Button wEditOperation = new Button(parent, SWT.PUSH);
 		wEditOperation.setText(BaseMessages.getString(PKG, "Edit operations"));
 		wEditOperation.setLayoutData(new FormDataBuilder().top(wGet, Const.MARGIN).right().result());
 		wEditOperation.addListener(SWT.Selection, new Listener() {
@@ -175,13 +170,12 @@ public class CleanseDialog extends AbstractStepDialog<CleanseMeta> {
 				new ColumnInfo(BaseMessages.getString(PKG, "CleanseDialog.ColumnInfo.FieldOutName"),
 						ColumnInfo.COLUMN_TYPE_TEXT, new String[] { "" }, false),
 				new ColumnInfo(BaseMessages.getString(PKG, "CleanseDialog.ColumnInfo.Rule"),
-						
+
 //						ColumnInfo.COLUMN_TYPE_CCOMBO, CleanseRuleManager.getInstance().getRuleNames()) };
 						ColumnInfo.COLUMN_TYPE_CCOMBO, this.getOperation()) };
 
 		columns[1].setToolTip(BaseMessages.getString(PKG, "CleanseDialog.ColumnInfo.OutputField.Tooltip"));
 		columns[1].setUsingVariables(true);
-
 
 		tblFields = new TableView(transMeta, parent, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI, columns,
 				this.getStepMeta().getCleanses().size(), lsMod, props);
@@ -192,25 +186,21 @@ public class CleanseDialog extends AbstractStepDialog<CleanseMeta> {
 		tblFields.getTable().addListener(SWT.Resize, new ColumnsResizer(4, 30, 30, 56));
 
 		// Search the fields in the background
-		final Runnable runnable = new Runnable() {
-			@Override
-			public void run() {
+		new Thread(() -> {
+			try {
 				StepMeta stepMeta = transMeta.findStep(stepname);
 				if (stepMeta != null) {
-					try {
-						RowMetaInterface row = transMeta.getPrevStepFields(stepMeta);
-						String[] fieldNames = new String[row.size()];
-						for (int i = 0; i < row.size(); i++) {
-							fieldNames[i] = row.getValueMeta(i).getName();
-						}
-						columns[0].setComboValues(fieldNames);
-					} catch (KettleException e) {
-						logError(BaseMessages.getString(PKG, "CleanseDialog.Log.UnableToFindInput"));
+					RowMetaInterface row = transMeta.getPrevStepFields(stepMeta);
+					String[] fieldNames = new String[row.size()];
+					for (int i = 0; i < row.size(); i++) {
+						fieldNames[i] = row.getValueMeta(i).getName();
 					}
+					columns[0].setComboValues(fieldNames);
 				}
+			} catch (KettleException e) {
+				logError(BaseMessages.getString(PKG, "CleanseDialog.Log.UnableToFindInput"));
 			}
-		};
-		new Thread(runnable).start();
+		}).start();
 
 		return parent;
 	}
@@ -219,18 +209,17 @@ public class CleanseDialog extends AbstractStepDialog<CleanseMeta> {
 
 		List<String> names = new ArrayList<String>();
 
-		
 		for (PluginInterface plugin : CleanseRuleManager.getInstance().getRules()) {
 			names.add(plugin.getName());
 		}
 
 		for (OperationDefinition definition : OperationManager.getInstance().getOperations()) {
-			names.add('@'+definition.getName());
+			names.add('@' + definition.getName());
 		}
-		
+
 		return names.stream().sorted().toArray(String[]::new);
 	}
-	
+
 	protected void onGetField() {
 		try {
 			RowMetaInterface row = transMeta.getPrevStepFields(stepname);
@@ -255,9 +244,9 @@ public class CleanseDialog extends AbstractStepDialog<CleanseMeta> {
 		}
 
 	}
-	
-	protected void onEditOperation() {	
+
+	protected void onEditOperation() {
 		OperationSelectionDialog dialog = new OperationSelectionDialog(shell, SWT.OPEN);
-		dialog.open();	
+		dialog.open();
 	}
 }
