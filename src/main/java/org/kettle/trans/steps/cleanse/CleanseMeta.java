@@ -19,6 +19,7 @@ package org.kettle.trans.steps.cleanse;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.kettle.ui.trans.steps.cleanse.CleanseDialog;
 import org.pentaho.di.core.CheckResult;
 import org.pentaho.di.core.CheckResultInterface;
 import org.pentaho.di.core.Const;
@@ -136,6 +137,12 @@ public class CleanseMeta extends BaseStepMeta implements StepMetaInterface {
 		return clone;
 	}
 
+	// For compatibility with 7.x
+	@Override
+	public String getDialogClassName() {
+		return CleanseDialog.class.getName();
+	}
+	
 	@Override
 	public String getXML() throws KettleValueException {
 
