@@ -6,7 +6,7 @@ import org.pentaho.di.core.exception.KettleValueException;
 import org.pentaho.di.core.row.ValueMetaInterface;
 
 /**
- * The rule capitalise the first letter of each word.
+ * The rule capitalize the first letter of each word.
  * 
  * @author Nicolas ADMENT
  *

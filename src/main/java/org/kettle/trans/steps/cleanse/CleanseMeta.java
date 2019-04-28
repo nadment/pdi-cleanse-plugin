@@ -58,7 +58,7 @@ import org.w3c.dom.Node;
  *
  */
 
-@Step(id = "Cleanse", name = "Cleanse.Name", description = "Cleanse.Description",  i18nPackageName = "org.kettle.trans.steps.cleanse", categoryDescription = "i18n:org.pentaho.di.trans.step:BaseStep.Category.Transform")
+@Step(id = "Cleanse", name = "Cleanse.Name", description = "Cleanse.Description", image = "cleanse.svg", i18nPackageName = "org.kettle.trans.steps.cleanse", categoryDescription = "i18n:org.pentaho.di.trans.step:BaseStep.Category.Transform")
 @InjectionSupported(localizationPrefix = "CleanseMeta.Injection.", groups = { "FIELDS" })
 public class CleanseMeta extends BaseStepMeta implements StepMetaInterface {
 
