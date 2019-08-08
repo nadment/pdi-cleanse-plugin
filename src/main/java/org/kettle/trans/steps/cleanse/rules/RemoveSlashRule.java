@@ -10,9 +10,9 @@ import org.pentaho.di.core.row.ValueMetaInterface;
  * 
  * @author Nicolas ADMENT *
  */
-@CleanseRule(id = "SlashRemoval", name = "Slash Removal", category = "Cleaning", description = "The rule removes forward and back slashes characters")
+@CleanseRule(id = "RemoveSlash", name = "Remove slash characters", category = "Cleaning", description = "The rule removes forward and back slashes characters")
 
-public class SlashRemovalRule implements ValueProcessor {
+public class RemoveSlashRule implements ValueProcessor {
 
 	@Override
 	public Object processValue(final ValueMetaInterface valueMeta, final Object object) throws KettleValueException {

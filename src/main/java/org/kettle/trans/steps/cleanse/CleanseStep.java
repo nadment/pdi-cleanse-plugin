@@ -17,6 +17,7 @@
 package org.kettle.trans.steps.cleanse;
 
 import java.util.Arrays;
+import java.util.Map;
 
 import org.pentaho.di.core.exception.KettleException;
 import org.pentaho.di.core.exception.KettleStepException;
@@ -120,32 +121,40 @@ public class CleanseStep extends BaseStep implements StepInterface {
 		RowMetaInterface inputRowMeta = getInputRowMeta();
 
 		// apply rules by order
-		for (Cleanse cleanse : meta.getCleanses()) {
-
+		for (Map.Entry<Cleanse,ValueProcessor> entry :data.processors.entrySet()) {
+			
+			Cleanse cleanse = entry.getKey();
+			
 			int index = data.outputRowMeta.indexOfValue(cleanse.getInputField());
-			ValueMetaInterface valueMeta = null;
+			ValueMetaInterface inputValueMeta = null;
+			ValueMetaInterface outputValueMeta = null;
 			try {
+				inputValueMeta = inputRowMeta.getValueMeta(index);
+				
 				// Get value from output in case we apply multi rule on same
 				// field
 				Object value = outputRowValues[index];
 
+				
 				// Output field is different
 				if (!Utils.isEmpty(cleanse.getName())) {
 					index = data.outputRowMeta.indexOfValue(cleanse.getName());
 				}
-				valueMeta = data.outputRowMeta.getValueMeta(index);
+				outputValueMeta = data.outputRowMeta.getValueMeta(index);
 				
 				Object result = value;
 				if (value != null) {
-					result = data.processors.get(cleanse).processValue(valueMeta, value);
+					ValueProcessor processor = entry.getValue();					
+					result = processor.processValue(outputValueMeta, value);
 				}
-				outputRowValues[index] = valueMeta.convertData(valueMeta, result);
+				
+				outputRowValues[index] = outputValueMeta.convertData(inputValueMeta, result);
 			} catch (KettleValueException e) {
-				logError(BaseMessages.getString(PKG, "Cleanse.Log.DataIncompatibleError", String.valueOf(row[index]),
-						String.valueOf(inputRowMeta.getValueMeta(index)), valueMeta));
+				logError(BaseMessages.getString(PKG, "Cleanse.Log.DataIncompatibleError", String.valueOf(row[index]),inputValueMeta, outputValueMeta));
 				throw e;
-			}
+			}			
 		}
+		
 
 		// put the row to the output row stream
 		putRow(data.outputRowMeta, outputRowValues);

@@ -2,9 +2,9 @@ package org.kettle.trans.steps.cleanse.rules;
 
 import org.junit.Test;
 import org.kettle.trans.steps.cleanse.CleanseRuleTest;
-import org.kettle.trans.steps.cleanse.rules.NonNumberRemovalRule;
+import org.kettle.trans.steps.cleanse.rules.RemoveNonNumberRule;
 
-public class NonNumberRemovalRuleTest extends CleanseRuleTest<NonNumberRemovalRule> {
+public class NonNumberRemovalRuleTest extends CleanseRuleTest<RemoveNonNumberRule> {
 
 	@Test
 	public void test() throws Exception {

@@ -14,8 +14,8 @@ import org.pentaho.di.core.row.ValueMetaInterface;
  * @author Nicolas ADMENT
  *
  */
-@CleanseRule(id = "SpaceRemoval", name = "Space Removal", category = "Cleaning", description = "The rule removes all white space characters")
-public class SpaceRemovalRule implements ValueProcessor {
+@CleanseRule(id = "RemoveSpace", name = "Remove space characters", category = "Cleaning", description = "The rule removes all white space characters")
+public class RemoveSpaceRule implements ValueProcessor {
 
 	@Override
 	public Object processValue(final ValueMetaInterface valueMeta, final Object object) throws KettleValueException {

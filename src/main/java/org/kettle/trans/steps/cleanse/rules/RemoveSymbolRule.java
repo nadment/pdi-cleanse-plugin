@@ -6,34 +6,34 @@ import org.pentaho.di.core.exception.KettleValueException;
 import org.pentaho.di.core.row.ValueMetaInterface;
 
 /**
- * The rule removes all control characters and other non-printable characters.
+ * The rule removes all symbol characters (Unicode Character Categories Currency
+ * {Sc}, Math {Sm}, Modifier {Sk} and Other {So}).
  * 
  * @see <a href='https://www.compart.com/en/unicode/category'>Unicode Character
  *      Categories</a>
  * @author Nicolas ADMENT
  */
 
-@CleanseRule(id = "NonPrintableRemoval", name = "Non Printable Removal", category = "Cleaning", description = "The rule removes all control characters and other non-printable characters")
-public class NonPrintableRemovalRule implements ValueProcessor {
+@CleanseRule(id = "RemoveSymbol", name = "Remove symbol characters", category = "Cleaning", description = "The rule removes all symbol characters (Unicode Character Categories {Sc} {Sm} {Sk} {So})")
+public class RemoveSymbolRule implements ValueProcessor {
 
 	@Override
-	public Object processValue(final ValueMetaInterface valueMeta, final Object object) throws KettleValueException {
+	public Object processValue(final ValueMetaInterface vm, final Object object) throws KettleValueException {
 		if (object == null)
 			return null;
 
-		String value = valueMeta.getString(object);
-
+		String value = vm.getString(object);
 		StringBuilder result = new StringBuilder(value.length());
+
 		for (int offset = 0; offset < value.length();) {
 			int codePoint = value.codePointAt(offset);
 			offset += Character.charCount(codePoint);
 
 			switch (Character.getType(codePoint)) {
-			case Character.CONTROL: // {Cc}
-			case Character.FORMAT: // {Cf}
-			case Character.PRIVATE_USE: // {Co}
-			case Character.SURROGATE: // {Cs}
-			case Character.UNASSIGNED: // {Cn}
+			case Character.CURRENCY_SYMBOL: // {Sc}
+			case Character.MATH_SYMBOL: // {Sm}
+			case Character.MODIFIER_SYMBOL: // {Sk}
+			case Character.OTHER_SYMBOL: // {So}
 				break;
 
 			default:
@@ -41,7 +41,9 @@ public class NonPrintableRemovalRule implements ValueProcessor {
 				break;
 			}
 		}
+
 		return result.toString();
+
 	}
 
 }

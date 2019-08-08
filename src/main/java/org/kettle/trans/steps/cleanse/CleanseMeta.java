@@ -80,29 +80,10 @@ public class CleanseMeta extends BaseStepMeta implements StepMetaInterface {
 	@InjectionDeep
 	private List<Cleanse> cleanses;
 
-
-
 	public CleanseMeta() {
 		super();
 	}
 
-	/**
-	 * Called by PDI to get a new instance of the step implementation. A
-	 * standard implementation passing the arguments to the constructor of the
-	 * step class is recommended.
-	 *
-	 * @param stepMeta
-	 *            description of the step
-	 * @param stepDataInterface
-	 *            instance of a step data class
-	 * @param cnr
-	 *            copy number
-	 * @param transMeta
-	 *            description of the transformation
-	 * @param disp
-	 *            runtime implementation of the transformation
-	 * @return the new instance of a step implementation
-	 */
 	@Override
 	public StepInterface getStep(StepMeta stepMeta, StepDataInterface stepDataInterface, int cnr, TransMeta transMeta,
 			Trans disp) {
@@ -119,8 +100,8 @@ public class CleanseMeta extends BaseStepMeta implements StepMetaInterface {
 
 	/**
 	 * This method is called every time a new step is created and should
-	 * allocate/set the step configuration to sensible defaults. The values set
-	 * here will be used by Spoon when a new step is created.
+	 * allocate/set the step configuration to sensible defaults. The values set here
+	 * will be used by Spoon when a new step is created.
 	 */
 	@Override
 	public void setDefault() {
@@ -132,8 +113,8 @@ public class CleanseMeta extends BaseStepMeta implements StepMetaInterface {
 	public Object clone() {
 		CleanseMeta clone = (CleanseMeta) super.clone();
 
-		// clone.cleanses = Arrays.copyOf(cleanses, cleanses.length);
-
+		clone.cleanses = new ArrayList<>(cleanses);
+		
 		return clone;
 	}
 
@@ -142,7 +123,7 @@ public class CleanseMeta extends BaseStepMeta implements StepMetaInterface {
 	public String getDialogClassName() {
 		return CleanseDialog.class.getName();
 	}
-	
+
 	@Override
 	public String getXML() throws KettleValueException {
 
@@ -208,7 +189,7 @@ public class CleanseMeta extends BaseStepMeta implements StepMetaInterface {
 
 			int count = repository.countNrStepAttributes(id_step, TAG_INPUT_FIELD);
 			cleanses = new ArrayList<>(count);
-			for (int i = 0; i < this.cleanses.size(); i++) {
+			for (int i = 0; i < count; i++) {
 				Cleanse cleanse = new Cleanse();
 				cleanse.setInputField(repository.getStepAttributeString(id_step, i, TAG_INPUT_FIELD));
 				cleanse.setName(repository.getStepAttributeString(id_step, i, TAG_NAME));
@@ -221,29 +202,29 @@ public class CleanseMeta extends BaseStepMeta implements StepMetaInterface {
 		}
 	}
 
-
 	@Override
 	public void getFields(RowMetaInterface inputRowMeta, String stepName, RowMetaInterface[] info, StepMeta nextStep,
 			VariableSpace space, Repository repository, IMetaStore metaStore) throws KettleStepException {
 		try {
 
-			// store the input stream meta
-			RowMetaInterface unalteredInputRowMeta = inputRowMeta.clone();
-
 			// add the output fields if specified
 			for (Cleanse cleanse : this.getCleanses()) {
-				if (!Utils.isEmpty(cleanse.getName())) {
 
-					// extracts the ValueMeta type of an input field
-					int type = ValueMetaInterface.TYPE_NONE;
-					int index = unalteredInputRowMeta.indexOfValue(cleanse.getInputField());
-					if (index > 0) {
-						type = unalteredInputRowMeta.getValueMeta(index).getType();
-					}
+				int index = inputRowMeta.indexOfValue(cleanse.getInputField());
+				if (index < 0)
+					continue; // Ignore cleanse
 
-					// create ValueMeta
-					ValueMetaInterface vm = ValueMetaFactory.createValueMeta(cleanse.getName(), type);
+				ValueMetaInterface vm = inputRowMeta.getValueMeta(index);
+
+				// Resolve variable name
+				String name = space.environmentSubstitute(cleanse.getName());
+				if (Utils.isEmpty(name) || name.equals(cleanse.getInputField())) {
 					vm.setOrigin(stepName);
+				} else {
+					// create new ValueMeta
+					vm = ValueMetaFactory.createValueMeta(name, vm.getType());
+					vm.setOrigin(stepName);
+					vm.setStorageType(ValueMetaInterface.STORAGE_TYPE_NORMAL);
 					inputRowMeta.addValueMeta(vm);
 				}
 			}
@@ -253,37 +234,17 @@ public class CleanseMeta extends BaseStepMeta implements StepMetaInterface {
 	}
 
 	/**
-	 * extracts the ValueMeta type of an input field, returns null if the field
-	 * is not present in the input stream
-	 */
-	private Integer getInputFieldValueType(RowMetaInterface inputRowMeta, Cleanse cleanse, int inputIndex) {
-		int index = inputRowMeta.indexOfValue(cleanse.getInputField());
-		if (index > 0) {
-			return inputRowMeta.getValueMeta(index).getType();
-		}
-		return null;
-	}
-
-	/**
 	 * This method is called when the user selects the "Verify Transformation"
 	 * option in Spoon.
 	 *
-	 * @param remarks
-	 *            the list of remarks to append to
-	 * @param transMeta
-	 *            the description of the transformation
-	 * @param stepMeta
-	 *            the description of the step
-	 * @param prev
-	 *            the structure of the incoming row-stream
-	 * @param input
-	 *            names of steps sending input to the step
-	 * @param output
-	 *            names of steps this step is sending output to
-	 * @param info
-	 *            fields coming in from info steps
-	 * @param metaStore
-	 *            metaStore to optionally read from
+	 * @param remarks   the list of remarks to append to
+	 * @param transMeta the description of the transformation
+	 * @param stepMeta  the description of the step
+	 * @param prev      the structure of the incoming row-stream
+	 * @param input     names of steps sending input to the step
+	 * @param output    names of steps this step is sending output to
+	 * @param info      fields coming in from info steps
+	 * @param metaStore metaStore to optionally read from
 	 */
 	@Override
 	public void check(List<CheckResultInterface> remarks, TransMeta transMeta, StepMeta stepMeta, RowMetaInterface prev,
@@ -346,5 +307,5 @@ public class CleanseMeta extends BaseStepMeta implements StepMetaInterface {
 	public void setCleanses(final List<Cleanse> cleanses) {
 		this.cleanses = cleanses;
 	}
-		  
+
 }

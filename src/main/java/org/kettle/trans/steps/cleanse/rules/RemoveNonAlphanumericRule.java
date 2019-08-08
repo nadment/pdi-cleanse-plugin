@@ -6,13 +6,15 @@ import org.pentaho.di.core.exception.KettleValueException;
 import org.pentaho.di.core.row.ValueMetaInterface;
 
 /**
- * The rule removes all non-number characters.
+ * The rule removes all non-alphanumeric characters including spaces.
+ * 
+ * @See {@link RemoveSymbolRule}
  * 
  * @author Nicolas ADMENT *
  */
-@CleanseRule(id = "NonNumberRemoval", name = "Non Number Removal", category = "Cleaning", description = "The rule removes all non-number characters")
 
-public class NonNumberRemovalRule implements ValueProcessor {
+@CleanseRule(id = "RemoveNonAlphanumeric", name = "Remove non alphanumeric characters", category = "Cleaning", description = "The rule removes all non-alphanumeric characters including spaces")
+public class RemoveNonAlphanumericRule implements ValueProcessor {
 
 	@Override
 	public Object processValue(final ValueMetaInterface valueMeta, final Object object) throws KettleValueException {
@@ -26,7 +28,7 @@ public class NonNumberRemovalRule implements ValueProcessor {
 		for (int offset = 0; offset < value.length();) {
 			int codePoint = value.codePointAt(offset);
 			offset += Character.charCount(codePoint);
-			if (Character.isDigit(codePoint)) {
+			if (Character.isDigit(codePoint) || Character.isAlphabetic(codePoint)) {
 				result.append(Character.toChars(codePoint));
 			}
 		}

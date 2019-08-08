@@ -154,15 +154,15 @@ public class CleanseDialog extends AbstractStepDialog<CleanseMeta> {
 			}
 		});
 
-		Button wEditOperation = new Button(parent, SWT.PUSH);
-		wEditOperation.setText(BaseMessages.getString(PKG, "Edit operations"));
-		wEditOperation.setLayoutData(new FormDataBuilder().top(wGet, Const.MARGIN).right().result());
-		wEditOperation.addListener(SWT.Selection, new Listener() {
-			@Override
-			public void handleEvent(Event e) {
-				onEditOperation();
-			}
-		});
+//		Button wEditOperation = new Button(parent, SWT.PUSH);
+//		wEditOperation.setText(BaseMessages.getString(PKG, "Edit operations"));
+//		wEditOperation.setLayoutData(new FormDataBuilder().top(wGet, Const.MARGIN).right().result());
+//		wEditOperation.addListener(SWT.Selection, new Listener() {
+//			@Override
+//			public void handleEvent(Event e) {
+//				onEditOperation();
+//			}
+//		});
 
 		ColumnInfo[] columns = new ColumnInfo[] {
 				new ColumnInfo(BaseMessages.getString(PKG, "CleanseDialog.ColumnInfo.FieldInName"),

@@ -2,9 +2,9 @@ package org.kettle.trans.steps.cleanse.rules;
 
 import org.junit.Test;
 import org.kettle.trans.steps.cleanse.CleanseRuleTest;
-import org.kettle.trans.steps.cleanse.rules.SlashRemovalRule;
+import org.kettle.trans.steps.cleanse.rules.RemoveSlashRule;
 
-public class SlashRemovalRuleTest extends CleanseRuleTest<SlashRemovalRule> {
+public class SlashRemovalRuleTest extends CleanseRuleTest<RemoveSlashRule> {
 
 	/** Long dash */
 	public static final char LONG_DASH = '\u2014';

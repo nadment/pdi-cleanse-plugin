@@ -2,9 +2,9 @@ package org.kettle.trans.steps.cleanse.rules;
 
 import org.junit.Test;
 import org.kettle.trans.steps.cleanse.CleanseRuleTest;
-import org.kettle.trans.steps.cleanse.rules.HyphenDashRemovalRule;
+import org.kettle.trans.steps.cleanse.rules.RemoveHyphenDashRule;
 
-public class HyphenDashRemovalRuleTest extends CleanseRuleTest<HyphenDashRemovalRule> {
+public class HyphenDashRemovalRuleTest extends CleanseRuleTest<RemoveHyphenDashRule> {
 
 	/** Long dash */
 	public static final char LONG_DASH = '\u2014';

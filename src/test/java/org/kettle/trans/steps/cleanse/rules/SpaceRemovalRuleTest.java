@@ -2,9 +2,9 @@ package org.kettle.trans.steps.cleanse.rules;
 
 import org.junit.Test;
 import org.kettle.trans.steps.cleanse.CleanseRuleTest;
-import org.kettle.trans.steps.cleanse.rules.SpaceRemovalRule;
+import org.kettle.trans.steps.cleanse.rules.RemoveSpaceRule;
 
-public class SpaceRemovalRuleTest extends CleanseRuleTest<SpaceRemovalRule> {
+public class SpaceRemovalRuleTest extends CleanseRuleTest<RemoveSpaceRule> {
 
 	/** Long dash */
 	public static final char LONG_DASH = '\u2014';

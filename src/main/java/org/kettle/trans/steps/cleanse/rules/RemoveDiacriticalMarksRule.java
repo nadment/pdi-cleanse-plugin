@@ -17,8 +17,8 @@ import org.pentaho.di.core.row.ValueMetaInterface;
  * 
  * @author Nicolas ADMENT *
  */
-@CleanseRule(id = "DiacriticalMarksRemoval", name = "Diacritical Marks Removal", category = "Cleaning", description = "The rule removes all diacritics marks")
-public class DiacriticalMarksRemovalRule implements ValueProcessor {
+@CleanseRule(id = "RemoveDiacriticalMarks", name = "Remove diacritical marks", category = "Cleaning", description = "The rule removes all diacritics marks")
+public class RemoveDiacriticalMarksRule implements ValueProcessor {
 
 	/**
 	 * The empty String {@code ""}.

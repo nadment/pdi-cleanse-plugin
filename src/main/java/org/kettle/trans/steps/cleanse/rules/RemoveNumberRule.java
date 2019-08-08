@@ -10,9 +10,9 @@ import org.pentaho.di.core.row.ValueMetaInterface;
  * 
  * @author Nicolas ADMENT *
  */
-@CleanseRule(id = "NumberRemoval", name = "Number Removal", category = "Cleaning", description = "The rule removes all number characters")
+@CleanseRule(id = "RemoveNumber", name = "Remove number characters", category = "Cleaning", description = "The rule removes all number characters")
 
-public class NumberRemovalRule implements ValueProcessor {
+public class RemoveNumberRule implements ValueProcessor {
 
 	@Override
 	public Object processValue(final ValueMetaInterface valueMeta, final Object object) throws KettleValueException {

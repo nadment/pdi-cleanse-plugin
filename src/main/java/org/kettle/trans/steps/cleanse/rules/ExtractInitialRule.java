@@ -12,7 +12,7 @@ import org.pentaho.di.core.row.ValueMetaInterface;
  *
  */
 @CleanseRule(id = "Initial", name = "Initial", category = "Extract", description = "The rule extracts the initial characters from each word")
-public class InitialExtractRule implements ValueProcessor {
+public class ExtractInitialRule implements ValueProcessor {
 
 	@Override
 	public Object processValue(final ValueMetaInterface valueMeta, final Object object) throws KettleValueException {
@@ -25,7 +25,7 @@ public class InitialExtractRule implements ValueProcessor {
 
 		boolean next = true;
 
-		for (int i = 1; i < value.length(); i++) {
+		for (int i = 0; i < value.length(); i++) {
 			char ch = value.charAt(i);
 
 			if (Character.isWhitespace(ch)) {

@@ -6,12 +6,13 @@ import org.pentaho.di.core.exception.KettleValueException;
 import org.pentaho.di.core.row.ValueMetaInterface;
 
 /**
- * The rule removes hyphen and dash characters.
+ * The rule replaces hyphen and dash characters with a space character.
+ * 
  * 
  * @author Nicolas ADMENT *
  */
-@CleanseRule(id = "HyphenDashRemoval", name = "Hyphen Dash Removal", category = "Cleaning", description = "The rule removes hyphen and dash characters")
-public class HyphenDashRemovalRule implements ValueProcessor {
+@CleanseRule(id = "ReplaceHyphenDashWithSpace", name = "Replace hyphen and dash with space", category = "Cleaning", description = "The rule replaces hyphen and dash characters with a space character")
+public class ReplaceHyphenDashWithSpaceRule implements ValueProcessor {
 
 	@Override
 	public Object processValue(final ValueMetaInterface valueMeta, final Object object) throws KettleValueException {
@@ -25,9 +26,12 @@ public class HyphenDashRemovalRule implements ValueProcessor {
 		for (int index = 0; index < value.length(); index++) {
 			char ch = value.charAt(index);
 
-			if (Character.getType(ch) != Character.DASH_PUNCTUATION) {
-				result.append(ch);
+			if (Character.getType(ch) == Character.DASH_PUNCTUATION) {
+				ch = ' ';
 			}
+
+			result.append(ch);
+
 		}
 
 		return result.toString();

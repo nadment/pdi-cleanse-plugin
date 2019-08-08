@@ -6,15 +6,12 @@ import org.pentaho.di.core.exception.KettleValueException;
 import org.pentaho.di.core.row.ValueMetaInterface;
 
 /**
- * The rule removes all non-alphanumeric characters including spaces.
- * 
- * @See {@link SymbolRemovalRule}
+ * The rule removes hyphen and dash characters.
  * 
  * @author Nicolas ADMENT *
  */
-
-@CleanseRule(id = "NonAlphanumericRemoval", name = "Non Alphanumeric Removal", category = "Cleaning", description = "The rule removes all non-alphanumeric characters including spaces")
-public class NonAlphanumericRemovalRule implements ValueProcessor {
+@CleanseRule(id = "RemoveHyphenDash", name = "Remove hyphen and dash characters", category = "Cleaning", description = "The rule removes hyphen and dash characters")
+public class RemoveHyphenDashRule implements ValueProcessor {
 
 	@Override
 	public Object processValue(final ValueMetaInterface valueMeta, final Object object) throws KettleValueException {
@@ -25,11 +22,11 @@ public class NonAlphanumericRemovalRule implements ValueProcessor {
 
 		StringBuilder result = new StringBuilder(value.length());
 
-		for (int offset = 0; offset < value.length();) {
-			int codePoint = value.codePointAt(offset);
-			offset += Character.charCount(codePoint);
-			if (Character.isDigit(codePoint) || Character.isAlphabetic(codePoint)) {
-				result.append(Character.toChars(codePoint));
+		for (int index = 0; index < value.length(); index++) {
+			char ch = value.charAt(index);
+
+			if (Character.getType(ch) != Character.DASH_PUNCTUATION) {
+				result.append(ch);
 			}
 		}
 

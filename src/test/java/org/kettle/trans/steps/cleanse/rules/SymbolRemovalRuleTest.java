@@ -2,9 +2,9 @@ package org.kettle.trans.steps.cleanse.rules;
 
 import org.junit.Test;
 import org.kettle.trans.steps.cleanse.CleanseRuleTest;
-import org.kettle.trans.steps.cleanse.rules.SymbolRemovalRule;
+import org.kettle.trans.steps.cleanse.rules.RemoveSymbolRule;
 
-public class SymbolRemovalRuleTest extends CleanseRuleTest<SymbolRemovalRule> {
+public class SymbolRemovalRuleTest extends CleanseRuleTest<RemoveSymbolRule> {
 
 	@Test
 	public void testCurrencySymbol() throws Exception {
