@@ -41,7 +41,7 @@
 
 		<!-- Third-party dependencies -->
 		<commons-lang.version>2.6</commons-lang.version>
-		<commons-vfs2.version>2.1-20150824</commons-vfs2.version>
+		<commons-vfs2.version>2.10.0</commons-vfs2.version>
 	</properties>
 
 	<build>
